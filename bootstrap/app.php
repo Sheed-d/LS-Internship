@@ -4,6 +4,8 @@ use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use Symfony\Component\HttpFoundation\Request;
+use Illuminate\Session\Middleware\StartSession;
+use Illuminate\View\Middleware\ShareErrorsFromSession;
 
 return Application::configure(dirname(__DIR__))
     ->withRouting(function (): void {
@@ -22,9 +24,12 @@ return Application::configure(dirname(__DIR__))
 
         $middleware->append([
             \App\Http\Middleware\PreventRequestsDuringMaintenance::class,
+            StartSession::class,
+            ShareErrorsFromSession::class,
             \App\Http\Middleware\TrimStrings::class,
             \App\Http\Middleware\VerifyCsrfToken::class,
             \App\Http\Middleware\EncryptCookies::class,
+            
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
